@@ -5,7 +5,7 @@ import { Home } from '../../pages/Home';
 
 describe('Home', () => {
   it('should be able to render new added tasks', () => {
-    const { getByPlaceholderText, getByText } = render(<Home />);
+    const { getByPlaceholderText, getByText, getByDisplayValue } = render(<Home />);
     const inputElement = getByPlaceholderText('Adicionar novo todo...');
 
     expect(getByText('0 tarefas'));
@@ -13,19 +13,19 @@ describe('Home', () => {
     fireEvent.changeText(inputElement, 'Primeira tarefa');
     fireEvent(inputElement, 'submitEditing');
     
-    expect(getByText('Primeira tarefa'));
+    expect(getByDisplayValue('Primeira tarefa'));
     expect(getByText('1 tarefa'));
 
     fireEvent.changeText(inputElement, 'Segunda tarefa');
     fireEvent(inputElement, 'submitEditing');
 
-    expect(getByText('Primeira tarefa'));
-    expect(getByText('Segunda tarefa'));
+    expect(getByDisplayValue('Primeira tarefa'));
+    expect(getByDisplayValue('Segunda tarefa'));
     expect(getByText('2 tarefas'));
   });
 
   it('should be able to render tasks as done and undone', () => {
-    const { getByPlaceholderText, getByText, getByTestId } = render(<Home />);
+    const { getByPlaceholderText, getByDisplayValue, getByTestId } = render(<Home />);
     const inputElement = getByPlaceholderText('Adicionar novo todo...');
 
     fireEvent.changeText(inputElement, 'Primeira tarefa');
@@ -34,7 +34,7 @@ describe('Home', () => {
     const buttonElement = getByTestId('button-0');
     const markerElement = getByTestId('marker-0');
     
-    const taskElement = getByText('Primeira tarefa');
+    const taskElement = getByDisplayValue('Primeira tarefa');
 
     expect(buttonElement).toHaveStyle({
       flex: 1,
@@ -69,7 +69,7 @@ describe('Home', () => {
   });
 
   it('should be able to remove tasks after the trash icon was pressed', async () => {
-    const { getByPlaceholderText, getByText, getByTestId, queryByText } = render(<Home />);
+    const { getByPlaceholderText, getByText,getByDisplayValue, getByTestId, queryByText } = render(<Home />);
     const inputElement = getByPlaceholderText('Adicionar novo todo...');
 
     fireEvent.changeText(inputElement, 'Primeira tarefa');
@@ -83,7 +83,7 @@ describe('Home', () => {
     fireEvent(firstTaskTrashIcon, 'press');
 
     expect(queryByText('Primeira tarefa')).toBeNull();
-    expect(getByText('Segunda tarefa'));
-    expect(getByText('1 tarefa'));
+    expect(getByDisplayValue('Segunda tarefa'));
+    expect(queryByText('1 tarefa'));
   });
 })

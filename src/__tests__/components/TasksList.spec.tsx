@@ -11,6 +11,7 @@ let tasks: {
 
 let mockedRemoveTask: jest.Mock;
 let mockedToggleTaskDone: jest.Mock;
+let mockedEditTask: jest.Mock;
 
 describe('MyTasksList', () => {
 
@@ -35,18 +36,20 @@ describe('MyTasksList', () => {
 
     mockedRemoveTask = jest.fn();
     mockedToggleTaskDone = jest.fn();
+    mockedEditTask = jest.fn();
   });
 
   it('should be able to render all tasks', () => {
-    const { getByText } = render(<TasksList tasks={tasks} removeTask={mockedRemoveTask} toggleTaskDone={mockedToggleTaskDone} />)
+    const { getByText, getByDisplayValue } = render(<TasksList tasks={tasks} removeTask={mockedRemoveTask} toggleTaskDone={mockedToggleTaskDone} editTask={mockedEditTask}/>)
     
-    getByText('Primeiro todo');
-    getByText('Segundo todo');
-    getByText('Terceiro todo');
+    getByDisplayValue('Primeiro todo');
+    getByDisplayValue('Segundo todo');
+    getByDisplayValue('Terceiro todo');
+
   });
 
   it('should be able to handle "removeTask" event', () => {
-    const { getByTestId } = render(<TasksList tasks={tasks} removeTask={mockedRemoveTask} toggleTaskDone={mockedToggleTaskDone} />)
+    const { getByTestId } = render(<TasksList tasks={tasks} removeTask={mockedRemoveTask} toggleTaskDone={mockedToggleTaskDone} editTask={mockedEditTask}/>)
     const firstTaskTrashIcon = getByTestId('trash-0');
 
     fireEvent(firstTaskTrashIcon, 'press');
@@ -55,8 +58,8 @@ describe('MyTasksList', () => {
   });
 
   it('should be able to handle "toggleTaskDone" event', () => {    
-    const { getByText } = render(<TasksList tasks={tasks} removeTask={mockedRemoveTask} toggleTaskDone={mockedToggleTaskDone} />)
-    const secondTask = getByText('Segundo todo');
+    const { getByDisplayValue } = render(<TasksList tasks={tasks} removeTask={mockedRemoveTask} toggleTaskDone={mockedToggleTaskDone} editTask={mockedEditTask}/>)
+    const secondTask = getByDisplayValue('Segundo todo');
 
     fireEvent.press(secondTask);
 
